@@ -16,12 +16,12 @@ export default function RenderLeafletMapCanvas({ setMarker, markerRef, setShowIn
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
-    // Initialize Map
-    const map = L.map(mapContainerRef.current).setView([34.0522, -118.2437], 13);
+    const map = L.map(mapContainerRef.current, {
+        fadeAnimation: true,
+        zoomAnimation: true
+    }).setView([34.0522, -118.2437], 13);
     
-    // Switch to CartoDB Dark Matter tiles
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 20
     }).addTo(map);
@@ -31,7 +31,6 @@ export default function RenderLeafletMapCanvas({ setMarker, markerRef, setShowIn
 
     map.on('click', (e) => {
       if (!CheckIfPlacementIsAllowed(isLockedRef.current)) return;
-      
       const { lat, lng } = e.latlng;
       setMarker({ lat, lng });
       setShowInput(true);
@@ -42,19 +41,23 @@ export default function RenderLeafletMapCanvas({ setMarker, markerRef, setShowIn
       
       const icon = L.divIcon({
         className: 'custom-marker',
-        html: '<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width:20px; height:20px; border:2px solid #a78bfa; border-radius:4px; box-shadow:0 0 15px rgba(102, 126, 234, 1);"></div>',
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+        html: '<div style="background: white; width:12px; height:12px; border-radius:50%; box-shadow:0 0 15px white;"></div>',
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
       });
 
       markerRef.current = L.marker([lat, lng], { icon }).addTo(mapInstanceRef.current);
     });
 
+    // Fix: Use invalidateSize to ensure map is ready before setView
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(p => {
         const { latitude, longitude } = p.coords;
-        map.setView([latitude, longitude], 15);
-      }, (err) => console.log("Location access denied."));
+        if (mapInstanceRef.current) {
+            mapInstanceRef.current.invalidateSize();
+            mapInstanceRef.current.setView([latitude, longitude], 15);
+        }
+      }, (err) => console.log("Location denied."));
     }
 
     return () => {
@@ -65,5 +68,5 @@ export default function RenderLeafletMapCanvas({ setMarker, markerRef, setShowIn
     };
   }, []);
 
-  return <div ref={mapContainerRef} style={{ height: '100%', width: '100%', cursor: isDropLocked ? 'not-allowed' : 'crosshair' }} />;
+  return <div ref={mapContainerRef} className="w-full h-full bg-black" />;
 }

@@ -1,22 +1,25 @@
 import React from 'react';
 import { AlwaysVisiblePopupOptions } from '../map/MakePopupAlwaysVisible';
+import RenderSleekComment from '../comment/RenderSleekComment';
+import { Button } from "../components/ui/button";
 
 export default function RenderDropActionButtons({ markerRef, comment, setComment, gifState, setGifState, setShowInput, setIsDropLocked }) {
   const handleDrop = () => {
     if (!markerRef.current) return;
     const gifUrl = gifState.selectedGif?.images?.fixed_width_small?.url || gifState.selectedGif?.images?.fixed_height_small?.url;
     
-    let html = '<div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">';
-    if (gifUrl) html += `<img src="${gifUrl}" style="max-width:120px; border-radius:4px; display:block;"/>`;
-    if (comment) html += `<div style="font-size:13px; font-weight: 600; text-align: center; color:#1e293b;">${comment}</div>`;
+    let html = '<div style="display: flex; flex-direction: column; align-items: center; padding: 4px;">';
+    if (gifUrl) {
+      html += `<img src="${gifUrl}" style="max-width: 130px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);"/>`;
+    }
+    html += RenderSleekComment(comment);
     html += '</div>';
 
     if (gifUrl || comment) {
-      // Apply the always visible options here
       markerRef.current.bindPopup(html, { 
         ...AlwaysVisiblePopupOptions,
-        maxWidth: 180, 
-        minWidth: 120 
+        maxWidth: 200, 
+        minWidth: 140 
       }).openPopup();
 
       setShowInput(false);
@@ -27,20 +30,22 @@ export default function RenderDropActionButtons({ markerRef, comment, setComment
   };
 
   return (
-    <div style={{ display: 'flex', gap: '8px' }}>
-      <button 
+    <div className="flex gap-2">
+      <Button 
         onClick={handleDrop} 
         disabled={!gifState.selectedGif && !comment} 
-        style={{ flex: 1, padding: '12px', background: (!gifState.selectedGif && !comment) ? '#334155' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}
+        variant="primary"
+        className="flex-1 font-bold"
       >
         🎯 Drop
-      </button>
-      <button 
+      </Button>
+      <Button 
         onClick={() => setShowInput(false)} 
-        style={{ padding: '12px', background: '#334155', color: '#94a3b8', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+        variant="ghost"
+        className="w-10 px-0"
       >
         ✕
-      </button>
+      </Button>
     </div>
   );
 }

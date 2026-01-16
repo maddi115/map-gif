@@ -12,9 +12,9 @@ export default function App() {
   const markerRef = useRef(null);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#0f172a', overflow: 'hidden' }}>
+    <div className="dark w-screen h-screen flex flex-col bg-black text-white overflow-hidden font-sans">
       <RenderApplicationHeader />
-      <div style={{ flex: 1, position: 'relative' }}>
+      <div className="flex-1 relative">
         <RenderLeafletMapCanvas 
           setMarker={setMarker}
           markerRef={markerRef} 
@@ -24,16 +24,18 @@ export default function App() {
           isDropLocked={isDropLocked}
         />
         {showInput && (
-          <RenderFloatingDropPanel
-            marker={marker}
-            markerRef={markerRef}
-            comment={comment}
-            setComment={setComment}
-            gifState={gifState}
-            setGifState={setGifState}
-            setShowInput={setShowInput}
-            setIsDropLocked={setIsDropLocked}
-          />
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-sm px-4">
+             <RenderFloatingDropPanel
+                marker={marker}
+                markerRef={markerRef}
+                comment={comment}
+                setComment={setComment}
+                gifState={gifState}
+                setGifState={setGifState}
+                setShowInput={setShowInput}
+                setIsDropLocked={setIsDropLocked}
+              />
+          </div>
         )}
       </div>
     </div>
