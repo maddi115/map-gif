@@ -1,24 +1,23 @@
 import React from 'react';
-import L from 'leaflet';
+import { AlwaysVisiblePopupOptions } from '../map/MakePopupAlwaysVisible';
 import RenderSleekComment from '../comment/RenderSleekComment';
 import { Button } from "../components/ui/button";
 export default function RenderDropActionButtons({ markerRef, comment, setComment, gifState, setGifState, setShowInput, setIsDropLocked }) {
   const handleDrop = () => {
     if (!markerRef.current) return;
     const gifUrl = gifState.selectedGif?.images?.fixed_width_small?.url || gifState.selectedGif?.images?.fixed_height_small?.url;
-    
+    let html = '<div style="display: grid; grid-template-columns: auto 1fr; gap: 8px; padding: 4px; align-items: center; height: 100%;">';
+    if (gifUrl) {
+      html += `<div style="display: flex; align-items: center; justify-content: center;"><img src="${gifUrl}" style="max-width: 55px; max-height: 64px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); object-fit: contain;"/></div>`;
+    }
+    html += RenderSleekComment(comment);
+    html += '</div>';
     if (gifUrl || comment) {
-      const icon = L.divIcon({
-        className: 'custom-gif-marker',
-        html: `<div style="position: relative; display: flex; flex-direction: column; align-items: center;">
-          ${gifUrl ? `<img src="${gifUrl}" style="width: 80px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.2);"/>` : ''}
-          ${comment ? RenderSleekComment(comment) : ''}
-        </div>`,
-        iconSize: [80, 80],
-        iconAnchor: [40, 40]
-      });
-      
-      markerRef.current.setIcon(icon);
+      markerRef.current.bindPopup(html, {
+        ...AlwaysVisiblePopupOptions,
+        maxWidth: 200,
+        minWidth: 140
+      }).openPopup();
       setShowInput(false);
       setIsDropLocked(true);
       setComment('');

@@ -1,27 +1,23 @@
 export default function RenderSleekComment(text) {
   if (!text) return '';
 
-  const words = text.split(' ');
-  const lines = [];
-  for (let i = 0; i < words.length; i += 6) {
-    lines.push(words.slice(i, i + 6).join(' '));
-  }
-  const formattedText = lines.join('<br>');
-
   return `
     <div style="
       color: #ffffff;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.4;
-      text-align: left;
-      margin: 0;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 4px;
       letter-spacing: -0.01em;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+      background: rgba(0,0,0,0.7);
+      padding: 4px 8px;
+      border-radius: 4px;
+      max-width: 80px;
       word-wrap: break-word;
     ">
-      ${formattedText}
+      ${text}
     </div>
   `;
 }

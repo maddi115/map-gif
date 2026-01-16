@@ -1,8 +1,12 @@
-.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+.leaflet-popup-content-wrapper {
   background: #000000 !important;
   color: #ffffff !important;
   border: 1px solid #27272a;
   border-radius: 8px !important;
   width: 200px !important;
   height: 72px !important;
+}
+
+.leaflet-popup-tip {
+  background: #1f1f1f;
 }
