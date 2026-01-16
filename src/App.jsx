@@ -6,12 +6,13 @@ import RenderFloatingDropPanel from './drop_panel/RenderFloatingDropPanel';
 export default function App() {
   const [marker, setMarker] = useState(null);
   const [showInput, setShowInput] = useState(false);
+  const [isDropLocked, setIsDropLocked] = useState(false);
   const [comment, setComment] = useState('');
   const [gifState, setGifState] = useState({ searchTerm: '', gifs: [], selectedGif: null, isSearching: false });
   const markerRef = useRef(null);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', fontFamily: 'system-ui, sans-serif', backgroundColor: '#0f172a', overflow: 'hidden' }}>
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#0f172a', overflow: 'hidden' }}>
       <RenderApplicationHeader />
       <div style={{ flex: 1, position: 'relative' }}>
         <RenderLeafletMapCanvas 
@@ -20,6 +21,7 @@ export default function App() {
           setShowInput={setShowInput}
           setGifState={setGifState}
           setComment={setComment}
+          isDropLocked={isDropLocked}
         />
         {showInput && (
           <RenderFloatingDropPanel
@@ -30,6 +32,7 @@ export default function App() {
             gifState={gifState}
             setGifState={setGifState}
             setShowInput={setShowInput}
+            setIsDropLocked={setIsDropLocked}
           />
         )}
       </div>
