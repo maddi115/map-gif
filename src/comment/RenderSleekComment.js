@@ -1,20 +1,27 @@
 export default function RenderSleekComment(text) {
   if (!text) return '';
-  
-  // Using Shadcn-inspired styling: semi-bold, white, clean tracking
+
+  const words = text.split(' ');
+  const lines = [];
+  for (let i = 0; i < words.length; i += 6) {
+    lines.push(words.slice(i, i + 6).join(' '));
+  }
+  const formattedText = lines.join('<br>');
+
   return `
     <div style="
-      color: #ffffff; 
-      font-family: 'Inter', system-ui, -apple-system, sans-serif; 
-      font-size: 14px; 
-      font-weight: 500; 
-      line-height: 1.4; 
-      text-align: center; 
-      margin-top: 8px;
+      color: #ffffff;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      text-align: left;
+      margin: 0;
       letter-spacing: -0.01em;
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      word-wrap: break-word;
     ">
-      ${text}
+      ${formattedText}
     </div>
   `;
 }
