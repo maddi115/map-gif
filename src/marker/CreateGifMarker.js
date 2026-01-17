@@ -6,7 +6,7 @@ export default function CreateGifMarker(gifUrl, comment) {
     className: 'custom-gif-marker',
     html: `<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 93px;">
       ${comment ? CommentStyles(comment) : ''}
-      ${gifUrl ? `<img src="${gifUrl}" style="width: 65px; height: 65px; object-fit: cover; border-radius: 50%; box-shadow: 0 2px 12px rgba(0,0,0,0.25); border: 3px solid #ffffff;"/>` : ''}
+      ${gifUrl ? `<img src="${gifUrl}" style="width: 65px; height: 65px; object-fit: cover; border-radius: 50%; box-shadow: 0 2px 12px rgba(0,0,0,0.25); border: 3px solid #454545;"/>` : ''}
     </div>`,
     iconSize: [93, 93],
     iconAnchor: [46.5, 46.5]
