@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import RenderApplicationHeader from './header/RenderApplicationHeader';
-import RenderLeafletMapCanvas from './map/RenderLeafletMapCanvas';
-import RenderFloatingDropPanel from './drop_panel/RenderFloatingDropPanel';
+import LeafletMap from './map/LeafletMap';
+import DropPanel from './drop_panel/DropPanel';
 import Toast from './components/ui/toast';
 
 export default function App() {
@@ -13,7 +13,6 @@ export default function App() {
   const [showToast, setShowToast] = useState(false);
   const markerRef = useRef(null);
 
-  // Trigger toast when a drop is locked in
   useEffect(() => {
     if (isDropLocked) {
       setShowToast(true);
@@ -25,22 +24,19 @@ export default function App() {
   return (
     <div className="dark w-screen h-screen flex flex-col bg-black text-white overflow-hidden font-sans">
       {showToast && <Toast message="GIF Dropped Successfully!" />}
-      
       <RenderApplicationHeader />
-      
       <div className="flex-1 relative">
-        <RenderLeafletMapCanvas 
+        <LeafletMap
           setMarker={setMarker}
-          markerRef={markerRef} 
+          markerRef={markerRef}
           setShowInput={setShowInput}
           setGifState={setGifState}
           setComment={setComment}
           isDropLocked={isDropLocked}
         />
-        
         {showInput && (
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-sm px-4">
-             <RenderFloatingDropPanel
+             <DropPanel
                 marker={marker}
                 markerRef={markerRef}
                 comment={comment}

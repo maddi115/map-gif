@@ -1,23 +1,13 @@
-import React from 'react';
-import L from 'leaflet';
-import RenderSleekComment from '../comment/RenderSleekComment';
+import CreateGifMarker from '../marker/CreateGifMarker';
 import { Button } from "../components/ui/button";
-export default function RenderDropActionButtons({ markerRef, comment, setComment, gifState, setGifState, setShowInput, setIsDropLocked }) {
+
+export default function DropButtons({ markerRef, comment, setComment, gifState, setGifState, setShowInput, setIsDropLocked }) {
   const handleDrop = () => {
     if (!markerRef.current) return;
     const gifUrl = gifState.selectedGif?.images?.fixed_width_small?.url || gifState.selectedGif?.images?.fixed_height_small?.url;
     
     if (gifUrl || comment) {
-      const icon = L.divIcon({
-        className: 'custom-gif-marker',
-        html: `<div style="position: relative; display: flex; flex-direction: column; align-items: center;">
-          ${gifUrl ? `<img src="${gifUrl}" style="width: 80px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.2);"/>` : ''}
-          ${comment ? RenderSleekComment(comment) : ''}
-        </div>`,
-        iconSize: [80, 80],
-        iconAnchor: [40, 40]
-      });
-      
+      const icon = CreateGifMarker(gifUrl, comment);
       markerRef.current.setIcon(icon);
       setShowInput(false);
       setIsDropLocked(true);
@@ -25,6 +15,7 @@ export default function RenderDropActionButtons({ markerRef, comment, setComment
       setGifState({ searchTerm: '', gifs: [], selectedGif: null, isSearching: false });
     }
   };
+
   return (
     <div className="flex gap-2">
       <Button

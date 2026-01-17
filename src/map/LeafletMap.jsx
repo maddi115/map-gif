@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import DisableDoubleClickZoom from './DisableDoubleClickZoom';
 import CheckIfPlacementIsAllowed from './CheckIfPlacementIsAllowed';
 import 'leaflet/dist/leaflet.css';
 
-export default function RenderLeafletMapCanvas({ setMarker, markerRef, setShowInput, setGifState, setComment, isDropLocked }) {
+export default function LeafletMap({ setMarker, markerRef, setShowInput, setGifState, setComment, isDropLocked }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const isLockedRef = useRef(isDropLocked);
@@ -20,7 +20,7 @@ export default function RenderLeafletMapCanvas({ setMarker, markerRef, setShowIn
         fadeAnimation: true,
         zoomAnimation: true
     }).setView([34.0522, -118.2437], 13);
-    
+
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 20
@@ -38,7 +38,7 @@ export default function RenderLeafletMapCanvas({ setMarker, markerRef, setShowIn
       setComment('');
 
       if (markerRef.current) mapInstanceRef.current.removeLayer(markerRef.current);
-      
+
       const icon = L.divIcon({
         className: 'custom-marker',
         html: '<div style="background: white; width:12px; height:12px; border-radius:50%; box-shadow:0 0 15px white;"></div>',
@@ -49,7 +49,6 @@ export default function RenderLeafletMapCanvas({ setMarker, markerRef, setShowIn
       markerRef.current = L.marker([lat, lng], { icon }).addTo(mapInstanceRef.current);
     });
 
-    // Fix: Use invalidateSize to ensure map is ready before setView
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(p => {
         const { latitude, longitude } = p.coords;
